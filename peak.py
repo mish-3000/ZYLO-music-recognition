@@ -50,7 +50,7 @@ def get_peaks_for_file(file):
 def get_peaks(minFreqBin, maxPeaksPerTimeframe, minDB): 
     allPeaks={}
     for file in wavFilesPaths:
-        get_peaks_for_file(file) 
+        
         peaks=[]; 
         for Tuple in get_peaks_for_file(file):
             peaks.append(Tuple)

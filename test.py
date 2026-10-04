@@ -36,7 +36,7 @@ def hashinformation(file):
         hash=((int(freqA)& 0x3FF)<< 22) | ((int(freqB) & 0x3FF) << 12) | (int(deltaT*1000) & 0xFFF)
 
         hashinfo[file].append((hash, timeA))
-        return hashinfo
+     return hashinfo
     
 
 
