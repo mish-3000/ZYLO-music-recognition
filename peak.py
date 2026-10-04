@@ -32,7 +32,7 @@ def get_peaks_for_file(file):
                     
                     freqTimeArr=[]; 
                     for j in sortedIndices:
-                        freqTimeTuple1=(time,freq[PxxFinalIndices[0][ValueIndices[j]]+minFreqBin])
+                        freqTimeTuple1=(i,freq[PxxFinalIndices[0][ValueIndices[j]]+minFreqBin])
                         freqTimeArr.append(freqTimeTuple1)
                 
                 
@@ -42,7 +42,7 @@ def get_peaks_for_file(file):
                     
                         freqTimeArr=[]
                         for j in indicesWithoutNegInf:
-                            freqTimeTuple2=(time,freq[PxxFinalIndices[0][ValueIndices[sortedIndices][j]]+minFreqBin])
+                            freqTimeTuple2=(i,freq[PxxFinalIndices[0][ValueIndices[sortedIndices][j]]+minFreqBin])
                             freqTimeArr.append(freqTimeTuple2)
                     for j in range(len(ValuesSorted)):  
                         Tuple=freqTimeArr[j] ; 

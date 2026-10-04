@@ -1,11 +1,11 @@
 import subprocess
 from spectrogram import get_Sxx
 from peak import get_peaks_for_file
-subprocess.run(['ffmpeg', '-n', '-i'])
+subprocess.run(['ffmpeg', '-n', '-i', '-ar'])
 pathToffmpeg = r"C:\ffmpeg-master-latest-win64-gpl-shared\bin\ffmpeg.exe"
 testclip = r"C:\Users\Hp\OneDrive\Desktop\reactjs\shazam\database\testClipShapeOfYou.mp3"
 testclipwav = r"C:\Users\Hp\OneDrive\Desktop\reactjs\shazam\database\testClipShapeOfYou.wav"
-subprocess.call([pathToffmpeg,'-n', '-i', testclip, testclipwav])
+subprocess.call([pathToffmpeg,'-n', '-ar', '44100', '-i', testclip, testclipwav])
 peaks=[]
 for tuple in get_peaks_for_file(testclipwav):
     peaks.append(tuple)
@@ -15,7 +15,7 @@ for i in range(len(peaks)):
     combinationsPerPeak=[]
     if freqA<1000:
         for j in range(i+1, len(peaks)):
-            freqT, timeT = peaks[j]
+            timeT, freqT = peaks[j]
             if freqT<1000 :
                 if timeT-timeA>50:
                     break
@@ -24,15 +24,22 @@ for i in range(len(peaks)):
                     if len(combinationsPerPeak)>10:
                         break
     if len(combinationsPerPeak)>0:
-        combinationsPerFile.extend(combinationsPerPeak)
-hashinfo={}
+        combinationsPerFile.extend(combinationsPerPeak);
+def hashinformation(file):
+     hashinfo={}
+     hashinfo[file]=[]
+     
+     for i in range(len(combinationsPerFile)):
+        freqA, freqB, timeA, deltaT, file = combinationsPerFile[i]
+        
+        hash=((int(freqA)& 0x3FF)<< 22) | ((int(freqB) & 0x3FF) << 12) | (int(deltaT*1000) & 0xFFF)
 
-for i in range(len(combinationsPerFile)):
-            freqA, freqB, timeA, deltaT, file = combinationsPerFile[i]
-            hashinfo[file]=[]
-            hash=((int(freqA)& 0x3FF)<< 22) | ((int(freqB) & 0x3FF) << 12) | (int(deltaT*1000) & 0xFFF)
+        hashinfo[file].append((hash, timeA))
+        return hashinfo
+    
 
-            hashinfo[file].append((hash, timeA))
+
+
 allHashes=[]
-for hash, time in hashinfo[testclipwav]:
+for hash, time in hashinformation(testclipwav)[testclipwav]:
     allHashes.append(hash)

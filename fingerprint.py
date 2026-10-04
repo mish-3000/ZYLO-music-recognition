@@ -34,7 +34,7 @@ def hashes():
         combination=combinations()[file]
         for i in range(len(combination)):
             freqA, freqB, timeA, deltaT, file = combination[i]
-            hash=((int(freqA)& 0x3FF)<< 22) | ((int(freqB) & 0x3FF) << 12) | (int(deltaT*1000) & 0xFFF)
+            hash=((int(freqA)& 0x3FF)<< 22) | ((int(freqB) & 0x3FF) << 12) | (int(deltaT) & 0xFFF)
 
             hashinfo[file].append((hash, timeA))
 
