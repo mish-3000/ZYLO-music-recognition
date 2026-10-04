@@ -1,4 +1,5 @@
 import psycopg2
+import psycopg2.extras
 from fingerprint import hashes
 from test import allHashes
 conn=psycopg2.connect(host="localhost", database="SHAZAM", user="postgres", password="12345678", port="5432")

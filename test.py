@@ -1,4 +1,5 @@
 import subprocess
+
 from spectrogram import get_Sxx
 from peak import get_peaks_for_file
 subprocess.run(['ffmpeg', '-n', '-i', '-ar'])
