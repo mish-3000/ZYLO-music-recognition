@@ -9,7 +9,7 @@ import wavio
 def get_Sxx(file):
     
     wavData = wavio.read(file)
-    sampleRate = wavData.rate
+    sampleRate = 44100; 
     signal = wavData.data; '''returns a 2d array always, even if the audio is mono'''
     if signal.shape[1] == 2:
         mono=signal.mean(axis=1)
@@ -22,7 +22,7 @@ def get_Sxx(file):
     elif mono.dtype==np.int32:
         mono = mono/2147483648
         
-    window_dur=0.09
+    window_dur=0.0928
     step_dur = window_dur / 2
     step_samples = int(round(step_dur * sampleRate))
     window_samples = int(round(window_dur * sampleRate))

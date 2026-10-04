@@ -11,7 +11,7 @@ for tuple in get_peaks_for_file(testclipwav):
     peaks.append(tuple)
 combinationsPerFile=[]
 for i in range(len(peaks)):
-    freqA, timeA = peaks[i]
+    timeA, freqA = peaks[i]
     combinationsPerPeak=[]
     if freqA<1000:
         for j in range(i+1, len(peaks)):
@@ -26,8 +26,13 @@ for i in range(len(peaks)):
     if len(combinationsPerPeak)>0:
         combinationsPerFile.extend(combinationsPerPeak)
 hashinfo={}
+
 for i in range(len(combinationsPerFile)):
             freqA, freqB, timeA, deltaT, file = combinationsPerFile[i]
-            hash=((freqA& 0x3FF)<< 22) | ((freqB & 0x3FF) << 12) | (deltaT & 0xFFF)
+            hashinfo[file]=[]
+            hash=((int(freqA)& 0x3FF)<< 22) | ((int(freqB) & 0x3FF) << 12) | (int(deltaT*1000) & 0xFFF)
 
-            hashinfo[file] = (hash, timeA)
+            hashinfo[file].append((hash, timeA))
+allHashes=[]
+for hash, time in hashinfo[testclipwav]:
+    allHashes.append(hash)
