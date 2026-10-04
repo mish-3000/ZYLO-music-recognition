@@ -2,7 +2,6 @@ import psycopg2
 import psycopg2.extras
 from fingerprint import hashes
 from spectrogram import step_dur
-from spectrogram import sampleRate
 from test import allHashes
 conn=psycopg2.connect(host="localhost", database="SHAZAM", user="postgres", password="12345678", port="5432")
 cursor=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -12,11 +11,13 @@ for filename,combinations in hashes().items():
     song_id = cursor.fetchone()[0]
     bulkData = []
     for hash, time in combinations:
-        bulkData.append(( hash, song_id, time*step_dur*1000/sampleRate))  # Convert time to milliseconds
+        bulkData.append(( hash, song_id, time*step_dur*1000))  # Convert time to milliseconds
     cursor.executemany("INSERT INTO fingerprints (hash, song_id, time_offset_ms) VALUES (%s, %s, %s)", bulkData)
 cursor.execute("SELECT * FROM fingerprints WHERE hash = ANY(%s)", (allHashes,))
 results = cursor.fetchall()
-
+cursor.execute("SELECT * FROM fingerprints")
+all_rows = cursor.fetchall()     
+        
 conn.commit()
 cursor.close()
 conn.close()

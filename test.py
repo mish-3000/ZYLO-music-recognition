@@ -33,7 +33,7 @@ def hashinformation(file):
      for i in range(len(combinationsPerFile)):
         freqA, freqB, timeA, deltaT, file = combinationsPerFile[i]
         
-        hash=((int(freqA)& 0x3FF)<< 22) | ((int(freqB) & 0x3FF) << 12) | (int(deltaT*1000) & 0xFFF)
+        hash=((int(freqA)& 0x3FF)<< 22) | ((int(freqB) & 0x3FF) << 12) | (int(deltaT) & 0xFFF)
 
         hashinfo[file].append((hash, timeA))
      return hashinfo
@@ -41,6 +41,6 @@ def hashinformation(file):
 
 
 
-allHashes=[]
+allHashes={}
 for hash, time in hashinformation(testclipwav)[testclipwav]:
-    allHashes.append(hash)
+    allHashes[hash] = time
