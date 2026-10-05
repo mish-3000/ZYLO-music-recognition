@@ -26,15 +26,16 @@ def sliding(timeDiffDict, gap):
     right=0
     left=0
     for i in range(len(timeDiffDict)):
-        finalDict[i]=[]
+        
         timeDiffList = timeDiffDict[i]
         timeDiffList.sort()
         right=left+1
         obsgap=timeDiffList[right]-timeDiffList[left]
         while right<len(timeDiffList) and left<len(timeDiffList):
             if obsgap<=200:
-                finalDict[i].append(timeDiffList[left])
-                finalDict[i].append(timeDiffList[right])
+                finalDict[timeDiffList[left]]=i
+                finalDict[timeDiffList[right]]=i
+
                 right+=1
                 obsgap=timeDiffList[right]-timeDiffList[left]
             elif obsgap>200:
@@ -46,17 +47,29 @@ def sliding(timeDiffDict, gap):
        
     return finalDict
 
-def get_max_count(finalDict):
+def get_max_count(timeDiffDict, finalDict):
+    grouping={}
     maxCount=0
-    for i in range(len(finalDict)):
-        count=len(finalDict[i])
+    for i in range(len(timeDiffDict)):
+        timeDiffList = timeDiffDict[i]
+        grouping[i]=[]
+        for x in timeDiffList:
+            if x in finalDict:
+                grouping[i].append(x)
+    for i in range(len(grouping)):
+        count=len(grouping[i])
         if count>maxCount:
             maxCount=count
-    return maxCount
+    return maxCount, grouping
 
-def  result(maxcount, finalDict):
-    for i in range(len(finalDict)):
-        if maxcount==len(finalDict[i]):
+
+
+        
+
+def  result(maxCount, grouping):
+    for i in range(len(grouping)):
+        if maxCount==len(grouping[i]):
             return i
 
-result(get_max_count(sliding(time_difference(), gap=200)),sliding(time_difference(), gap=200))
+matchedSong=result(get_max_count(time_difference, sliding(time_difference, gap=200)))
+       
