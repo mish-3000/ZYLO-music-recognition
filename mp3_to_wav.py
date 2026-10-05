@@ -3,7 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import wave, sys
-subprocess.run(['ffmpeg', '-n', '-i', '-ar'])
+
 mp3Files=r'C:\Users\Hp\OneDrive\Desktop\reactjs\shazam\database\mp3Files'
 wavFiles=r'C:\Users\Hp\OneDrive\Desktop\reactjs\shazam\database\wavFiles'
 pathToffmpeg = r"C:\ffmpeg-master-latest-win64-gpl-shared\bin\ffmpeg.exe"

@@ -15,7 +15,7 @@ for filename,combinations in hashes().items():
 cursor.execute("CREATE TEMPORARY TABLE unique_fingerprints AS SELECT DISTINCT hash, song_id, time_offset_ms FROM fingerprints;")
 cursor.execute("DELETE FROM fingerprints;")
 cursor.execute("INSERT INTO fingerprints (hash, song_id, time_offset_ms) SELECT hash, song_id, time_offset_ms FROM unique_fingerprints;")
-cursor.execute("DROP TEMPORARY TABLE unique_fingerprints;")
+cursor.execute("DROP TABLE unique_fingerprints;")
 
 hash_list = list(allHashes.keys())
 cursor.execute("SELECT * FROM fingerprints WHERE hash = ANY(%s)", (hash_list,))
