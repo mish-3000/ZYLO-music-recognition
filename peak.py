@@ -57,8 +57,8 @@ def get_peaks(minFreqBin, maxPeaksPerTimeframe, minDB):
             
         allPeaks[file]=peaks ;           
     return allPeaks
-
+allPeaksCache=get_peaks(minFreqBin, maxPeaksPerTimeframe, minDB)
 def allDicts(file):
-    return get_peaks(minFreqBin, maxPeaksPerTimeframe, minDB)[file]
+    return allPeaksCache[file]
         
 

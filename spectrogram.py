@@ -33,7 +33,7 @@ def get_Sxx(file):
         
     return freq, time, melxx
 
-def show_spectrogram(freq, time, melxx):
+'''def show_spectrogram(freq, time, melxx):
         
         plt.figure()
         plt.pcolormesh(time[:100], freq, melxx[:, :100], shading='gouraud')
@@ -44,4 +44,4 @@ def show_spectrogram(freq, time, melxx):
 if __name__ == "__main__":
     for file in wavFilesPaths:
         freq, time, melxx = get_Sxx(file)
-        show_spectrogram(freq, time, melxx)
+        show_spectrogram(freq, time, melxx)'''

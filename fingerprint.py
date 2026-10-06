@@ -26,12 +26,12 @@ def combinations():
         
         allCombinations[file] = combinationsPerFile
     return allCombinations
-
+combinationsCache=combinations()
 def hashes():
     hashinfo={}
     for file in wavFilesPaths:
         hashinfo[file] = []
-        combination=combinations()[file]
+        combination=combinationsCache[file]
         for i in range(len(combination)):
             freqA, freqB, timeA, deltaT, file = combination[i]
             hash=((int(freqA)& 0x3FF)<< 22) | ((int(freqB) & 0x3FF) << 12) | (int(deltaT) & 0xFFF)

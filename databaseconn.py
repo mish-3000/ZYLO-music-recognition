@@ -1,9 +1,9 @@
-import psycopg2
-import psycopg2.extras
+import psycopg
+from psycopg.rows import dict_row
 from fingerprint import hashes
 from test import allHashes
-conn=psycopg2.connect(host="localhost", database="SHAZAM", user="postgres", password="12345678", port="5432")
-cursor=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+conn = psycopg.connect(host="localhost", dbname="SHAZAM", user="postgres", password="12345678", port="5432", row_factory=dict_row)
+cursor = conn.cursor()
 
 for filename,combinations in hashes().items():
     cursor.execute("INSERT INTO songs (filename) VALUES (%s) RETURNING id", (filename,))

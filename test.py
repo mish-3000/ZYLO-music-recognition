@@ -1,12 +1,13 @@
 import subprocess
+import os
 
 from spectrogram import get_Sxx
 from peak import get_peaks_for_file
 
-pathToffmpeg = r"C:\ffmpeg-master-latest-win64-gpl-shared\bin\ffmpeg.exe"
-testclip = r"C:\Users\Hp\OneDrive\Desktop\reactjs\shazam\database\testClipShapeOfYou.mp3"
-testclipwav = r"C:\Users\Hp\OneDrive\Desktop\reactjs\shazam\database\testClipShapeOfYou.wav"
-subprocess.call([pathToffmpeg,'-n', '-ar', '44100', '-i', testclip, testclipwav])
+pathToffmpeg = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\ffmpeg.exe"
+testclip = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\mp3\testclipShapeOfYou.mp3"
+testclipwav = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\mp3\testclipShapeOfYou.wav"
+subprocess.call([pathToffmpeg, '-n', '-i', testclip, '-ar', '44100', testclipwav])
 peaks=[]
 for tuple in get_peaks_for_file(testclipwav):
     peaks.append(tuple)
