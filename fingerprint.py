@@ -39,3 +39,4 @@ def hashes():
             hashinfo[file].append((hash, timeA))
 
     return hashinfo
+hashesCache=hashes()

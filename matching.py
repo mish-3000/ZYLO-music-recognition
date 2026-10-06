@@ -20,6 +20,7 @@ def time_difference():
                 timeDiffDict[id].append(timeDifference)
     
     return timeDiffDict
+time_differenceCache=time_difference()
 
 finalDict={}
 def sliding(timeDiffDict, gap):
@@ -47,6 +48,8 @@ def sliding(timeDiffDict, gap):
         right=0 
        
     return finalDict
+slidingCache=sliding(time_differenceCache,gap=200)
+
 
 def get_max_count(timeDiffDict, finalDict):
     grouping={}
@@ -63,7 +66,7 @@ def get_max_count(timeDiffDict, finalDict):
             maxCount=count
     return maxCount, grouping
 
-
+get_max_countCache=get_max_count(time_differenceCache, slidingCache)
 
         
 
@@ -72,5 +75,5 @@ def  result(maxCount, grouping):
         if maxCount==len(grouping[i]):
             return i
 
-matchedSong=result(*get_max_count(time_difference(), sliding(time_difference(), gap=200)))
+matchedSong=result(*get_max_countCache)
 print("song:",matchedSong)     
