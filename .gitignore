@@ -10,3 +10,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.vscode
+__pycache__
+shazam.session.sql
