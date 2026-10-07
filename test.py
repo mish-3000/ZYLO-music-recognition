@@ -5,9 +5,10 @@ from spectrogram import get_Sxx
 from peak import get_peaks_for_file
 
 pathToffmpeg = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\ffmpeg.exe"
-testclip = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\mp3\testclipShapeOfYou.mp3"
-testclipwav = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\mp3\testclipShapeOfYou.wav"
-subprocess.call([pathToffmpeg, '-n', '-i', testclip, '-ar', '44100', testclipwav])
+testclip = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\Yes.mp4"
+testclipwav = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\Yes.wav"
+subprocess.call([pathToffmpeg, '-hide_banner', 
+    '-loglevel', 'warning', '-n', '-i', testclip, '-ar', '44100', testclipwav])
 peaks=[]
 for tuple in get_peaks_for_file(testclipwav):
     peaks.append(tuple)

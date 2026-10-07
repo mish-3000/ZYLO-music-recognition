@@ -6,8 +6,14 @@ conn = psycopg.connect(host="localhost", dbname="SHAZAM", user="postgres", passw
 cursor = conn.cursor()
 
 for filename,combinations in hashesCache.items():
-    cursor.execute("INSERT INTO songs (filename) VALUES (%s) RETURNING id", (filename,))
-    song_id = cursor.fetchone()['id']
+    cursor.execute("INSERT INTO songs (filename) VALUES (%s) ON CONFLICT(filename) DO NOTHING RETURNING id", (filename,))
+    result = cursor.fetchone()
+    if result is not None:
+        song_id=result['id']
+    else:
+        cursor.execute("SELECT id FROM songs WHERE filename=%s", (filename,))
+        result = cursor.fetchone()
+        song_id=result['id']
     bulkData = []
     for hash, time in combinations:
         bulkData.append(( hash, song_id, time*0.0464*1000))  # Convert time to milliseconds

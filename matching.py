@@ -3,11 +3,12 @@ from mp3_to_wav import wavFilesPaths
 from test import allHashes
 
 
-    
+timeDiffDict={}    
 def time_difference():
-    for i in range(len(wavFilesPaths)):
-        id=i
-        timeDiffDict={}
+    song_ids = set(row['song_id'] for row in all_rows) 
+    for id in song_ids:
+        
+        
         timeDiffDict[id]=[]
         for j in range(len(all_rows)):
             hash = all_rows[j]['hash']
@@ -26,7 +27,7 @@ finalDict={}
 def sliding(timeDiffDict, gap):
     right=0
     left=0
-    for i in range(len(timeDiffDict)):
+    for i in timeDiffDict:
         
         timeDiffList = timeDiffDict[i]
         timeDiffList.sort()
@@ -39,11 +40,11 @@ def sliding(timeDiffDict, gap):
                 finalDict[timeDiffList[right]]=i
 
                 right+=1
-                obsgap=timeDiffList[right]-timeDiffList[left]
+               
             elif obsgap>200:
                 left=right
                 right=left+1
-                obsgap=timeDiffList[right]-timeDiffList[left]  
+               
         left=0
         right=0 
        
@@ -54,13 +55,13 @@ slidingCache=sliding(time_differenceCache,gap=200)
 def get_max_count(timeDiffDict, finalDict):
     grouping={}
     maxCount=0
-    for i in range(len(timeDiffDict)):
+    for i in timeDiffDict:
         timeDiffList = timeDiffDict[i]
         grouping[i]=[]
         for x in timeDiffList:
             if x in finalDict:
                 grouping[i].append(x)
-    for i in range(len(grouping)):
+    for i in grouping:
         count=len(grouping[i])
         if count>maxCount:
             maxCount=count
@@ -71,7 +72,7 @@ get_max_countCache=get_max_count(time_differenceCache, slidingCache)
         
 
 def  result(maxCount, grouping):
-    for i in range(len(grouping)):
+    for i in grouping:
         if maxCount==len(grouping[i]):
             return i
 
