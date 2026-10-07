@@ -26,8 +26,7 @@ cursor.execute("DROP TABLE unique_fingerprints;")
 hash_list = list(allHashes.keys())
 cursor.execute("SELECT * FROM fingerprints WHERE hash = ANY(%s)", (hash_list,))
 results = cursor.fetchall()
-cursor.execute("SELECT * FROM fingerprints")
-all_rows = cursor.fetchall()     
+  
         
 conn.commit()
 cursor.close()

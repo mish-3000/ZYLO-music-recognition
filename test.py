@@ -5,8 +5,8 @@ from spectrogram import get_Sxx
 from peak import get_peaks_for_file
 
 pathToffmpeg = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\ffmpeg.exe"
-testclip = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\Yes.mp4"
-testclipwav = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\Yes.wav"
+testclip = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\three.OGG"
+testclipwav = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\three.wav"
 subprocess.call([pathToffmpeg, '-hide_banner', 
     '-loglevel', 'warning', '-n', '-i', testclip, '-ar', '44100', testclipwav])
 peaks=[]
@@ -45,4 +45,4 @@ def hashinformation(file):
 
 allHashes={}
 for hash, time in hashinformation(testclipwav)[testclipwav]:
-    allHashes[hash] = time
+    allHashes[hash] = time* 0.0464 * 1000 

@@ -6,7 +6,7 @@ import numpy as np
 
 minFreqBin=23 ;'''approx 250Hz'''
 maxPeaksPerTimeframe=3
-minDB=-50
+minDB=-80
 def get_peaks_for_file(file):
             freq, time, melxx = get_Sxx(file)
             input_melxx=np.where(melxx[minFreqBin:,:]>minDB, melxx[minFreqBin:,:], -np.inf); 
