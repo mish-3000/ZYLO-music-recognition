@@ -1,10 +1,9 @@
 from peak import allDicts
-from mp3_to_wav import wavFilesPaths
 import numpy as np
 
-def combinations():
+def combinations(files):
     allCombinations={}
-    for file in wavFilesPaths:
+    for file in files:
         peaks = allDicts(file)
         combinationsPerFile=[]
         for i in range(len(peaks)):
@@ -21,15 +20,15 @@ def combinations():
                             if len(combinationsPerPeak)>10:
                                 break
             if len(combinationsPerPeak)>0:
-                combinationsPerFile.extend(combinationsPerPeak)            
-            
-        
+                combinationsPerFile.extend(combinationsPerPeak)
+
+
         allCombinations[file] = combinationsPerFile
     return allCombinations
-combinationsCache=combinations()
-def hashes():
+def hashes(files):
+    combinationsCache=combinations(files)
     hashinfo={}
-    for file in wavFilesPaths:
+    for file in files:
         hashinfo[file] = []
         combination=combinationsCache[file]
         for i in range(len(combination)):
@@ -39,4 +38,3 @@ def hashes():
             hashinfo[file].append((hash, timeA))
 
     return hashinfo
-hashesCache=hashes()

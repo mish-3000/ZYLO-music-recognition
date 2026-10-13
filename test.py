@@ -1,14 +1,46 @@
 import subprocess
 import os
+import sounddevice as sd
+import soundfile as sf
+import numpy as np
 
 from spectrogram import get_Sxx
 from peak import get_peaks_for_file
 
-pathToffmpeg = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\ffmpeg.exe"
-testclip = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\three.OGG"
-testclipwav = r"C:\Users\Hp\OneDrive\Desktop\PROJECTS\zylo\database\testClips\three.wav"
-subprocess.call([pathToffmpeg, '-hide_banner', 
-    '-loglevel', 'warning', '-n', '-i', testclip, '-ar', '44100', testclipwav])
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+pathToffmpeg = os.path.join(BASE_DIR, 'downloaders', 'ffmpeg.exe')
+if not os.path.exists(pathToffmpeg):
+    pathToffmpeg = 'ffmpeg'
+testClipsDir = os.path.join(BASE_DIR, 'database', 'testClips')
+os.makedirs(testClipsDir, exist_ok=True)
+testclip = os.path.join(testClipsDir, 'recording.flac')
+testclipwav = os.path.join(testClipsDir, 'recording.wav')
+
+fs = int(sd.query_devices(kind='input')['default_samplerate']) 
+chunks = []
+def callback(indata, frames, time_info, status):
+    chunks.append(indata.copy())
+
+input("Press Enter to start recording.")
+with sd.InputStream(samplerate=fs, channels=2, callback=callback):
+    input("Recording. press Enter to stop")
+print("Recording finished")
+if not chunks:
+    print("Error: nothing was recorded.")
+    exit()
+myrecording = np.concatenate(chunks)
+duration = len(myrecording) / fs
+if duration < 3:
+    print(f"Recording too short ({duration:.1f} s), record at least 3 seconds")
+    exit()
+loudness_db = 20*np.log10(np.median(np.abs(myrecording)) + 1e-12)
+if loudness_db < -60:
+    print(f"Recording too quiet ({loudness_db:.1f} dB), move closer / raise mic volume")
+    exit()
+sf.write(testclip, myrecording, fs)
+
+subprocess.call([pathToffmpeg, '-hide_banner',
+    '-loglevel', 'warning', '-y', '-i', testclip, '-ar', '11025', testclipwav])
 peaks=[]
 for tuple in get_peaks_for_file(testclipwav):
     peaks.append(tuple)
@@ -46,3 +78,6 @@ def hashinformation(file):
 allHashes={}
 for hash, time in hashinformation(testclipwav)[testclipwav]:
     allHashes[hash] = time* 0.0464 * 1000 
+
+if not allHashes:
+    print("Warning: 0 hashes extracted from test clip.")

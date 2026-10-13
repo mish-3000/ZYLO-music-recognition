@@ -9,8 +9,8 @@ import wavio
 def get_Sxx(file):
     
     wavData = wavio.read(file)
-    sampleRate = 44100; 
-    signal = wavData.data; '''returns a 2d array always, even if the audio is mono'''
+    sampleRate = 11025; 
+    signal = wavData.data
     if signal.shape[1] == 2:
         mono=signal.mean(axis=1)
     else:
@@ -29,16 +29,7 @@ def get_Sxx(file):
     window = hann(window_samples, sym=False)
     overlap = window_samples - step_samples
     freq, time, Sxx = spectrogram(mono, fs=sampleRate, window=window, nperseg=window_samples, noverlap=overlap)
-    melxx=np.where(Sxx>0, 10*np.log10(Sxx), -100)
+    with np.errstate(divide='ignore'):
+        melxx=np.where(Sxx>0, 10*np.log10(Sxx), -100)
         
     return freq, time, melxx
-
-'''def show_spectrogram(freq, time, melxx):
-        
-        plt.figure()
-        plt.pcolormesh(time[:100], freq, melxx[:, :100], shading='gouraud')
-        plt.title('Spectrogram')
-        plt.xlabel('Time (s)')
-        plt.ylabel('Frequency (Hz)')
-        plt.show()
-'''

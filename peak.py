@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from mp3_to_wav import wavFilesPaths
 import numpy as np
 
-minFreqBin=23 ;'''approx 250Hz'''
+minFreqBin=23
 maxPeaksPerTimeframe=3
 minDB=-80
 def get_peaks_for_file(file):
@@ -21,7 +21,7 @@ def get_peaks_for_file(file):
                     ValueIndices=np.where(PxxFinalIndices[1]==i)[0]; 
                     Values=Pxx[PxxFinalIndices[0][ValueIndices], PxxFinalIndices[1][ValueIndices]]
                     if np.all(Values == -np.inf):
-                        continue; '''if all peaks are -infinity skip this iteration'''
+                        continue
                     if len(Values)>maxPeaksPerTimeframe:
                         sortedIndices=np.argsort(Values)[-maxPeaksPerTimeframe:][::-1]
                         ValuesSorted=Values[sortedIndices]
@@ -47,18 +47,8 @@ def get_peaks_for_file(file):
                     for j in range(len(ValuesSorted)):  
                         Tuple=freqTimeArr[j] ; 
                         yield Tuple
-def get_peaks(minFreqBin, maxPeaksPerTimeframe, minDB): 
-    allPeaks={}
-    for file in wavFilesPaths:
-        
-        peaks=[]; 
-        for Tuple in get_peaks_for_file(file):
-            peaks.append(Tuple)
-            
-        allPeaks[file]=peaks ;           
-    return allPeaks
-allPeaksCache=get_peaks(minFreqBin, maxPeaksPerTimeframe, minDB)
+
 def allDicts(file):
-    return allPeaksCache[file]
+    return list(get_peaks_for_file(file))
         
 
