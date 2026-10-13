@@ -53,10 +53,14 @@ pip install -r requirements.txt
 | OS | FFmpeg | PostgreSQL |
 |---|---|---|
 | Windows | `winget install Gyan.FFmpeg` | [postgresql.org/download/windows](https://www.postgresql.org/download/windows/) |
-| macOS | `brew install ffmpeg` | `brew install postgresql && brew services start postgresql` |
+| macOS | `brew install ffmpeg` | [postgresql.org/download/macosx](https://www.postgresql.org/download/macosx/) |
 | Linux | `sudo apt install ffmpeg` | `sudo apt install postgresql` |
 
-On Linux also run `sudo apt install libportaudio2 libsndfile1` (needed for microphone recording).
+On Linux also run `sudo apt install libportaudio2` (needed for microphone recording). A fresh Linux PostgreSQL install has no password for the `postgres` user, so set one:
+
+```bash
+sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'yourpassword';"
+```
 
 ### 3. Create the database and tables
 
@@ -156,7 +160,7 @@ Added 3 new songs to database.
 
 1. **Conversion** (`mp3_to_wav.py`) — every song is converted to an 11,025 Hz WAV with FFmpeg. Already-converted songs are skipped.
 2. **Spectrogram** (`spectrogram.py`) — the audio is split into 92.8 ms Hann windows with a 46.4 ms hop and converted to decibels.
-3. **Peak picking** (`peak.py`) — local maxima are found with a 5×5 maximum filter; the strongest 3 per time frame above 250 Hz and −80 dB are kept.
+3. **Peak picking** (`peak.py`) — local maxima are found with a 5×5 maximum filter; the strongest 3 per time frame above ≈250 Hz and −80 dB are kept.
 4. **Fingerprinting** (`fingerprint.py`) — each peak below 1 kHz is paired with up to 11 later peaks (also below 1 kHz) within 50 frames. Each pair becomes a 32-bit hash:
    `frequency A (10 bits) | frequency B (10 bits) | time gap (12 bits)`, stored with the time it occurs in the song.
 5. **Storage** (`databaseconn.py`) — hashes go into the `fingerprints` table, indexed by hash.
@@ -206,7 +210,7 @@ The `idx_hash` index makes hash lookups fast even with millions of rows.
 | `Error: could not connect to database.` | Make sure PostgreSQL is running, the password in `databaseconn.py` is correct, and the `SHAZAM` database exists (step 3). |
 | `relation "songs" does not exist` | The tables haven't been created — run the SQL in step 3 on the `SHAZAM` database. |
 | `Error: mp3Files directory not found` | Create `database/orgFiles/` and add songs. |
-| `FileNotFoundError` mentioning ffmpeg | Install FFmpeg (see step 2) or put `ffmpeg.exe` in `downloaders/`. |
+| `FileNotFoundError` raised from a `subprocess.call` line | FFmpeg was not found. Install it (see step 2) or put `ffmpeg.exe` in `downloaders/`. |
 | `Recording too quiet` | Raise the microphone volume in your OS sound settings and hold the music source closer. |
 | `Recording too short` | Record at least 3 seconds; 8–10 seconds gives the most reliable results. |
 | Wrong song or `No match found` | Play the song from a **separate device** (phone/speaker). Laptops often apply echo cancellation and noise suppression that remove the computer's own audio and music from the mic. Also check the song is actually in `database/orgFiles/`. |
